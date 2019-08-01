@@ -50,7 +50,7 @@
          Styling
         */
         body {
-          font: 16px/1.5em "Overpass", "Open Sans", Helvetica, sans-serif;
+          font: 14px/1.2em "Overpass", "Open Sans", Helvetica, sans-serif;
           color: #333;
           font-weight: 300;
         }
@@ -151,26 +151,7 @@
      <div class="container">
       <div class="content">
         <div class="tabset">
-            <div class="timeline-item" date-is='20-07-1990'>
-                <h1>Hello, 'Im a single div responsive timeline without mediaQueries!</h1>
-                <p>
-                    I'm speaking with myself, number one, because I have a very good brain and I've said a lot of things. I write the best placeholder text, and I'm the biggest developer on the web by far... While that's mock-ups and this is politics, are they really so different? I think the only card she has is the Lorem card.
-                </p>
-            </div>
-
-            <div class="timeline-item" date-is='20-07-1990'>
-                <h1>Oeehhh, that's awesome.. Me too!</h1>
-                <p>
-                    I'm speaking with myself, number one, because I have a very good brain and I've said a lot of things. I write the best placeholder text, and I'm the biggest developer on the web by far... While that's mock-ups and this is politics, are they really so different? I think the only card she has is the Lorem card.
-                </p>
-            </div>
-
-            <div class="timeline-item" date-is='20-07-1990'>
-                <h1>I'm ::last-child so my border fades ^__^</h1>
-                <p>
-                    I'm speaking with myself, number one, because I have a very good brain and I've said a lot of things. I write the best placeholder text, and I'm the biggest developer on the web by far... While that's mock-ups and this is politics, are they really so different? I think the only card she has is the Lorem card.
-                </p>
-            </div>
+            
         </div>
       </div>
     </div>
@@ -203,25 +184,69 @@
             });
             
             // Create tab structure
-            /*$('.tabset').append(
+            $('.tabset').append(
                 '<div class="tab-panels"></div>'
             );
             
             // Create tab content
             $.each(keywords, function( index, keyword ) {
               $('.tab-panels').append(
-                    '<section id="'+keyword.toLowerCase()+'" class="tab-panel"><p></p></section>'
+                    '<div class="timeline-item" date-is="20-07-1990" id="'+keyword.toLowerCase()+'">'
               );
-            
-              $('#'+keyword.toLowerCase()+' p').rss(
+                
+                var rss = rss(
                     'https://news.google.com/rss/search?q='+keyword.toLowerCase(),{
                     limit: 10,
-                    entryTemplate: '<li><a href="{url}" target="_blank">{title}</a></li>',
+                    entryTemplate: '<p>{body}</p>',
                     success: function() {
                         console.log(keyword);
                     }
                 });
-            });*/
+                $('.tab-panels').append(
+                    '</div>'
+              );
+            
+              /*$('#'+keyword.toLowerCase()).rss(
+                    'https://news.google.com/rss/search?q='+keyword.toLowerCase(),{
+                    limit: 10,
+                    entryTemplate: '<p>{body}</p>',
+                    success: function() {
+                        console.log(keyword);
+                    }
+                });
+                $('.tab-panels').append(
+                    '</div>'
+              );*/
+            });
+            
+            /*
+            <section id="'+keyword.toLowerCase()+'" class="tab-panel"><p></p></section>
+            
+            
+            <div class="timeline-item" date-is='20-07-1990'>
+                <h1>Hello, 'Im a single div responsive timeline without mediaQueries!</h1>
+                <p>
+                    I'm speaking with myself, number one, because I have a very good brain and I've said a lot of things. I write the best placeholder text, and I'm the biggest developer on the web by far... While that's mock-ups and this is politics, are they really so different? I think the only card she has is the Lorem card.
+                </p>
+                <h1>Hello, 'Im a single div responsive timeline without mediaQueries!</h1>
+                <p>
+                    I'm speaking with myself, number one, because I have a very good brain and I've said a lot of things. I write the best placeholder text, and I'm the biggest developer on the web by far... While that's mock-ups and this is politics, are they really so different? I think the only card she has is the Lorem card.
+                </p>
+            </div>
+
+            <div class="timeline-item" date-is='20-07-1990'>
+                <h1>Oeehhh, that's awesome.. Me too!</h1>
+                <p>
+                    I'm speaking with myself, number one, because I have a very good brain and I've said a lot of things. I write the best placeholder text, and I'm the biggest developer on the web by far... While that's mock-ups and this is politics, are they really so different? I think the only card she has is the Lorem card.
+                </p>
+            </div>
+
+            <div class="timeline-item" date-is='20-07-1990'>
+                <h1>I'm ::last-child so my border fades ^__^</h1>
+                <p>
+                    I'm speaking with myself, number one, because I have a very good brain and I've said a lot of things. I write the best placeholder text, and I'm the biggest developer on the web by far... While that's mock-ups and this is politics, are they really so different? I think the only card she has is the Lorem card.
+                </p>
+            </div>*/
         });
         
     </script>
