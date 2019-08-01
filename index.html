@@ -156,8 +156,8 @@
       </div>
     </div>
       
-    <script src="<?php echo 'http://'.$_SERVER["SERVER_NAME"]; ?>/assets/lib/jquery-3.3.1.min.js"></script>
-    <script src="<?php echo 'http://'.$_SERVER["SERVER_NAME"]; ?>/assets/lib/jquery.rss.min.js"></script>
+    <script src="/assets/lib/jquery-3.3.1.min.js"></script>
+    <script src="/assets/lib/jquery.rss.min.js"></script>
     
     <script>
         
@@ -193,10 +193,11 @@
               $('.tab-panels').append(
                     '<div class="timeline-item" date-is="20-07-1990" id="'+keyword.toLowerCase()+'">'
               );
-                
-                var rss = rss(
+            
+              $('#'+keyword.toLowerCase()).rss(
                     'https://news.google.com/rss/search?q='+keyword.toLowerCase(),{
                     limit: 10,
+                    effect: 'slideFastSynced',    
                     entryTemplate: '<p>{body}</p>',
                     success: function() {
                         console.log(keyword);
@@ -205,18 +206,6 @@
                 $('.tab-panels').append(
                     '</div>'
               );
-            
-              /*$('#'+keyword.toLowerCase()).rss(
-                    'https://news.google.com/rss/search?q='+keyword.toLowerCase(),{
-                    limit: 10,
-                    entryTemplate: '<p>{body}</p>',
-                    success: function() {
-                        console.log(keyword);
-                    }
-                });
-                $('.tab-panels').append(
-                    '</div>'
-              );*/
             });
             
             /*
