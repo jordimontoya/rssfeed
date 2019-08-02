@@ -169,7 +169,7 @@
             return this.id
         }).get();*/
         
-        var keywords = ["FACEBOOK", "GOOLE", "APPLE"];
+        var keywords = ["FACEBOOK", "ALPHABET", "APPLE", "AMAZON", "APPLE", "NETFLIX"];
         
         $(function(){
             
@@ -196,22 +196,22 @@
             $.each(keywords, function( index, keyword ) {
               $('.tab-panels').append(
                     '<section id="'+keyword.toLowerCase()+'" class="tab-panel">'+
-                        '<div id="today" class="timeline-item" date-is="Today"></div>'+
-                        '<div id="yesterday" class="timeline-item" date-is="Yesterday"></div>'+
-                        '<div id="older" class="timeline-item" date-is="Older"></div>'+
+                        '<div class="timeline-item today" date-is="Today"></div>'+
+                        '<div class="timeline-item yesterday" date-is="Yesterday"></div>'+
+                        '<div class="timeline-item previous" date-is="Previous"></div>'+
                     '</section>'
               );
             
               $('#'+keyword.toLowerCase()+' .timeline-item').rss(
                     'https://news.google.com/rss/news?as_mind='+moment().format('DD')+'&as_minm='+moment().format('M')+'&scoring=d&q='+keyword.toLowerCase(),{
                     limit: 30,
-                    //effect: 'slideFastSynced',
+                    effect: 'slideFastSynced',
                     dateFormat: 'DDMMYYYY',
                     entryTemplate: '<p class="{date}">{body}</p>',
                     success: function() {
                         //console.log('#'+keyword.toLowerCase()+' .timeline-item .'+moment().format('DDMMYYYY'));
-                        $('#'+keyword.toLowerCase()+' .timeline-item .'+moment().format('DDMMYYYY')).prependTo('#today');
-                        $('#'+keyword.toLowerCase()+' .timeline-item .'+moment().subtract(1, 'days').format('DDMMYYYY')).prependTo('#yesterday');
+                        $('#'+keyword.toLowerCase()+' .timeline-item .'+moment().format('DDMMYYYY')).prependTo('#'+keyword.toLowerCase()+' .today');
+                        $('#'+keyword.toLowerCase()+' .timeline-item .'+moment().subtract(1, 'days').format('DDMMYYYY')).prependTo('#'+keyword.toLowerCase()+' .yesterday');
                     }
                 });
                 
