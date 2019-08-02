@@ -1,28 +1,33 @@
 <!DOCTYPE html>
 <html lang="">
   <head>
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
     <style>
         @import url(https://fonts.googleapis.com/css?family=Raleway);
         body{
-          background: #efefef;  
+          background: #efefef;
+          font-size: 1em;
+          font-family: "Raleway";
+          color: #333;
+          font-weight: 300;
+        }
+        p{
+          text-align: left;
         }
         .container{
           background-color:#fefefe;
-          margin: 2% 5% 0 5%;
+          margin: 2% 2% 0 2%;
           padding: 2% 3% 3% 3%;
           box-shadow: 0.1em 0.2em 1.1em #666;
           border-radius: 1em;
           text-align: center;
         }
         .page-title-bar{
-           margin: 2% 5% 0 5%;
+           margin: 2% 2% 0 2%;
         }
-        .page-title{margin-top:0;font-size:1.75rem}
-        .content p{
-          text-align: left;
-        }
-        p,h1,h2{
-          font-family: "Raleway";
+        .page-title{
+            margin-top:0;
+            font-size:1.75rem;
         }
         
         /*
@@ -32,7 +37,6 @@
           position: absolute;
           left: -200vw;
         }
-
         .tabset .tab-panel {
           display: none;
         }
@@ -44,15 +48,6 @@
         .tabset > input:nth-child(9):checked ~ .tab-panels > .tab-panel:nth-child(5),
         .tabset > input:nth-child(11):checked ~ .tab-panels > .tab-panel:nth-child(6) {
           display: block;
-        }
-
-        /*
-         Styling
-        */
-        body {
-          font: 14px/1.2em "Overpass", "Open Sans", Helvetica, sans-serif;
-          color: #333;
-          font-weight: 300;
         }
 
         .tabset > label {
@@ -101,7 +96,6 @@
           max-width: 65em;
         }
         
-        
         /* ----------------  TIMELINE*/
 
         .timeline-item {
@@ -139,6 +133,17 @@
           -o-border-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 60%, rgba(0, 0, 0, 0)) 1 100%;
              border-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 60%, rgba(0, 0, 0, 0)) 1 100%;
         }
+        
+        @media(max-width: 400px) {
+          body {
+              font-size: 1.05em;
+          }
+            
+          .timeline-item {
+              padding: 3em 0.6em 1em;
+          }
+        }
+        
         /*.timeline-item hr {
             border-bottom: 2px solid rgba(0, 0, 0, 0.3);
         }*/
@@ -209,7 +214,7 @@
                     effect: 'slideFast',
                     dateFormat: 'DDMMYYYY',
                     layoutTemplate: '{entries}',
-                    entryTemplate: '<p class="{date}"><a href="{url}">{title}</a><br><br><span>{bodyPlain}</span></p>',
+                    entryTemplate: '<p class="{date}"><a href="{url}" target="_blank" rel="nofollow">{title}</a><br><br><span>{bodyPlain}</span></p>',
                     success: function() {
                         $('#'+keyword.toLowerCase()+' .timeline-item .'+moment().format('DDMMYYYY')).prependTo('#'+keyword.toLowerCase()+' .today');
                         $('#'+keyword.toLowerCase()+' .timeline-item .'+moment().subtract(1, 'days').format('DDMMYYYY')).prependTo('#'+keyword.toLowerCase()+' .yesterday');
