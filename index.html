@@ -93,7 +93,7 @@
         }
 
         .tab-panel {
-          padding: 30px 0;
+          padding: 20px 0;
           border-top: 1px solid #ccc;
         }
 
@@ -139,6 +139,9 @@
           -o-border-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 60%, rgba(0, 0, 0, 0)) 1 100%;
              border-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 60%, rgba(0, 0, 0, 0)) 1 100%;
         }
+        /*.timeline-item hr {
+            border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+        }*/
     </style>
   </head>
   <body>
@@ -157,6 +160,7 @@
     </div>
       
     <script src="/assets/lib/jquery-3.3.1.min.js"></script>
+    <script src="/assets/lib/moment.min.js"></script>
     <script src="/assets/lib/jquery.rss.min.js"></script>
     
     <script>
@@ -169,7 +173,7 @@
         
         $(function(){
             
-            // Create tab
+            // Create tabs
             $.each(keywords, function( index, keyword ) {
 
               if(index != 0){
@@ -183,7 +187,7 @@
               }
             });
             
-            // Create tab structure
+            // Create tab content structure
             $('.tabset').append(
                 '<div class="tab-panels"></div>'
             );
@@ -191,51 +195,27 @@
             // Create tab content
             $.each(keywords, function( index, keyword ) {
               $('.tab-panels').append(
-                    '<div class="timeline-item" date-is="20-07-1990" id="'+keyword.toLowerCase()+'">'
+                    '<section id="'+keyword.toLowerCase()+'" class="tab-panel">'+
+                        '<div id="today" class="timeline-item" date-is="Today"></div>'+
+                        '<div id="yesterday" class="timeline-item" date-is="Yesterday"></div>'+
+                        '<div id="older" class="timeline-item" date-is="Older"></div>'+
+                    '</section>'
               );
             
-              $('#'+keyword.toLowerCase()).rss(
-                    'https://news.google.com/rss/search?q='+keyword.toLowerCase(),{
-                    limit: 10,
-                    effect: 'slideFastSynced',    
-                    entryTemplate: '<p>{body}</p>',
+              $('#'+keyword.toLowerCase()+' .timeline-item').rss(
+                    'https://news.google.com/rss/news?as_mind='+moment().format('DD')+'&as_minm='+moment().format('M')+'&scoring=d&q='+keyword.toLowerCase(),{
+                    limit: 30,
+                    //effect: 'slideFastSynced',
+                    dateFormat: 'DDMMYYYY',
+                    entryTemplate: '<p class="{date}">{body}</p>',
                     success: function() {
-                        console.log(keyword);
+                        //console.log('#'+keyword.toLowerCase()+' .timeline-item .'+moment().format('DDMMYYYY'));
+                        $('#'+keyword.toLowerCase()+' .timeline-item .'+moment().format('DDMMYYYY')).prependTo('#today');
+                        $('#'+keyword.toLowerCase()+' .timeline-item .'+moment().subtract(1, 'days').format('DDMMYYYY')).prependTo('#yesterday');
                     }
                 });
-                $('.tab-panels').append(
-                    '</div>'
-              );
+                
             });
-            
-            /*
-            <section id="'+keyword.toLowerCase()+'" class="tab-panel"><p></p></section>
-            
-            
-            <div class="timeline-item" date-is='20-07-1990'>
-                <h1>Hello, 'Im a single div responsive timeline without mediaQueries!</h1>
-                <p>
-                    I'm speaking with myself, number one, because I have a very good brain and I've said a lot of things. I write the best placeholder text, and I'm the biggest developer on the web by far... While that's mock-ups and this is politics, are they really so different? I think the only card she has is the Lorem card.
-                </p>
-                <h1>Hello, 'Im a single div responsive timeline without mediaQueries!</h1>
-                <p>
-                    I'm speaking with myself, number one, because I have a very good brain and I've said a lot of things. I write the best placeholder text, and I'm the biggest developer on the web by far... While that's mock-ups and this is politics, are they really so different? I think the only card she has is the Lorem card.
-                </p>
-            </div>
-
-            <div class="timeline-item" date-is='20-07-1990'>
-                <h1>Oeehhh, that's awesome.. Me too!</h1>
-                <p>
-                    I'm speaking with myself, number one, because I have a very good brain and I've said a lot of things. I write the best placeholder text, and I'm the biggest developer on the web by far... While that's mock-ups and this is politics, are they really so different? I think the only card she has is the Lorem card.
-                </p>
-            </div>
-
-            <div class="timeline-item" date-is='20-07-1990'>
-                <h1>I'm ::last-child so my border fades ^__^</h1>
-                <p>
-                    I'm speaking with myself, number one, because I have a very good brain and I've said a lot of things. I write the best placeholder text, and I'm the biggest developer on the web by far... While that's mock-ups and this is politics, are they really so different? I think the only card she has is the Lorem card.
-                </p>
-            </div>*/
         });
         
     </script>
