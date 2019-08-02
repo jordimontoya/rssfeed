@@ -169,7 +169,7 @@
             return this.id
         }).get();*/
         
-        var keywords = ["FACEBOOK", "ALPHABET", "APPLE", "AMAZON", "APPLE", "NETFLIX"];
+        var keywords = ["FACEBOOK", "ALPHABET", "APPLE", "AMAZON", "NETFLIX"];
         
         $(function(){
             
@@ -202,16 +202,30 @@
                     '</section>'
               );
             
+              // Create rss content
               $('#'+keyword.toLowerCase()+' .timeline-item').rss(
-                    'https://news.google.com/rss/news?as_mind='+moment().format('DD')+'&as_minm='+moment().format('M')+'&scoring=d&q='+keyword.toLowerCase(),{
-                    limit: 30,
-                    effect: 'slideFastSynced',
+                    'https://news.google.com/rss/news?&scoring=d&q='+keyword.toLowerCase(),{
+                    limit: 5,
+                    effect: 'slideFast',
                     dateFormat: 'DDMMYYYY',
-                    entryTemplate: '<p class="{date}">{body}</p>',
+                    layoutTemplate: '{entries}',
+                    entryTemplate: '<p class="{date}"><a href="{url}">{title}</a><br><br><span>{bodyPlain}</span></p>',
                     success: function() {
-                        //console.log('#'+keyword.toLowerCase()+' .timeline-item .'+moment().format('DDMMYYYY'));
                         $('#'+keyword.toLowerCase()+' .timeline-item .'+moment().format('DDMMYYYY')).prependTo('#'+keyword.toLowerCase()+' .today');
                         $('#'+keyword.toLowerCase()+' .timeline-item .'+moment().subtract(1, 'days').format('DDMMYYYY')).prependTo('#'+keyword.toLowerCase()+' .yesterday');
+                        
+                        //Delete duplicated title in description
+                        $('#'+keyword.toLowerCase()+' .timeline-item p').each(function( index, value ) {
+                            var title = $(this).find("a").text();
+                            title = title.replace("&", "&amp;").replace(" - ", "&nbsp;&nbsp;")
+                            console.log("TITLE:   "+title);
+                            if (title) {
+                                var desc = $(this).find("span").html().replace(title, "");
+                                $(this).find("span").html(desc);
+                                
+                                console.log("DESC:   "+desc);
+                            }
+                        });
                     }
                 });
                 
