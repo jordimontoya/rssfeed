@@ -20,7 +20,7 @@
           padding: 2% 3% 3% 3%;
           box-shadow: 0.1em 0.2em 1.1em #666;
           border-radius: 1em;
-          text-align: center;
+          /*text-align: center;*/
         }
         .page-title-bar{
            margin: 2% 2% 0 2%;
@@ -92,21 +92,26 @@
           border-top: 1px solid #ccc;
         }
 
-        .tabset {
+        /*.tabset {
           max-width: 65em;
-        }
+        }*/
         
         /* ----------------  TIMELINE*/
 
         .timeline-item {
+          max-width: 65em;
           padding: 3em 2em 1em;
           position: relative;
           color: rgba(0, 0, 0, 0.7);
           border-left: 2px solid rgba(0, 0, 0, 0.3);
         }
         
-        .timeline-item h1 {
-            text-align: left;
+        .timeline-item p{
+          /*background-color:#efefef;*/
+          padding: 2% 3% 3% 3%;
+          margin: 2% 2% 0 2%;
+          box-shadow: 0.1em 0.2em 1.1em #666;
+          border-radius: 1em;
         }
         
         .timeline-item::before {
@@ -134,32 +139,189 @@
              border-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 60%, rgba(0, 0, 0, 0)) 1 100%;
         }
         
+        /*.timeline-item hr {
+            border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+        }*/
+        
+        
+        /* BUTTON */
+        #content {
+          position: absolute;
+          right: 4%;
+          transform: translate(0%, -50%);
+        }
+
+        #content.on {
+          -webkit-animation-name: in-out;
+          animation-name: in-out;
+          -webkit-animation-duration: 0.7s;
+          animation-duration: 0.7s;
+          -webkit-animation-timing-function: linear;
+          animation-timing-function: linear;
+          -webkit-animation-iteration-count: 1;
+          animation-iteration-count: 1;
+        }
+
+        input {
+          box-sizing: border-box;
+        width: 2em;
+        height: 2em;
+        border: 0.27em solid #06c;
+        border-radius: 50%;
+        background: #fefefe;
+        color: #06c;
+          font-size: 16px;
+          font-weight: 400;
+          outline: 0;
+          -webkit-transition: width 0.4s ease-in-out, border-radius 0.8s ease-in-out,
+            padding 0.2s;
+          transition: width 0.4s ease-in-out, border-radius 0.8s ease-in-out,
+            padding 0.2s;
+          -webkit-transition-delay: 0.4s;
+          transition-delay: 0.4s;
+          -webkit-transform: translate(0%, -50%);
+          -ms-transform: translate(0%, -50%);
+          transform: translate(0%, -50%);
+        }
+
+        .search {
+          background: none;
+          position: absolute;
+          top: 0px;
+          right: 5%;
+          height: 2em;
+          width: 2em;
+          padding: 0;
+          border-radius: 100%;
+          outline: 0;
+          border: 0;
+          color: inherit;
+          cursor: pointer;
+          -webkit-transition: 0.2s ease-in-out;
+          transition: 0.2s ease-in-out;
+          -webkit-transform: translate(-100%, -50%);
+          -ms-transform: translate(-100%, -50%);
+          transform: translate(0%, -50%);
+        }
+
+        .search:before {
+          content: "";
+          position: absolute;
+          width: 1.2em;
+          height: 0.3em;
+          background-color: #06c;
+          -webkit-transform: rotate(45deg);
+          -ms-transform: rotate(45deg);
+          transform: rotate(45deg);
+          margin-top: 17px;
+          margin-left: 12px;
+          -webkit-transition: 0.2s ease-in-out;
+          transition: 0.2s ease-in-out;
+        }
+
+        .close {
+          -webkit-transition: 0.4s ease-in-out;
+          transition: 0.4s ease-in-out;
+          -webkit-transition-delay: 0.4s;
+          transition-delay: 0.4s;
+        }
+
+        .close:before {
+          content: "";
+          position: absolute;
+          width: 2em;
+          height: 0.3em;
+          margin-top: -1px;
+          margin-left: -13px;
+          background-color: #06c;
+          -webkit-transform: rotate(45deg);
+          -ms-transform: rotate(45deg);
+          transform: rotate(45deg);
+          -webkit-transition: 0.2s ease-in-out;
+          transition: 0.2s ease-in-out;
+        }
+
+        .close:after {
+          content: "";
+          position: absolute;
+          width: 2em;
+          height: 0.3em;
+          background-color: #06c;
+          margin-top: -1px;
+          margin-left: -13px;
+          cursor: pointer;
+          -webkit-transform: rotate(-45deg);
+          -ms-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+        }
+
+        .square {
+          box-sizing: border-box;
+        padding: 0 40px 0 10px;
+        width: 18em;
+        height: 3em;
+        border: 0.25 solid #06c;
+        border-radius: 0;
+        background-color: #fefefe;
+        color: #06c;
+          font-size: 1em;
+          font-weight: 400;
+          outline: 0;
+          -webkit-transition: width 0.4s ease-in-out, border-radius 0.4s ease-in-out,
+            padding 0.2s;
+          transition: width 0.4s ease-in-out, border-radius 0.4s ease-in-out,
+            padding 0.2s;
+          -webkit-transition-delay: 0.4s, 0s, 0.4s;
+          transition-delay: 0.4s, 0s, 0.4s;
+          -webkit-transform: translate(0%, -50%);
+          -ms-transform: translate(0%, -50%);
+          transform: translate(0%, -50%);
+        }
+        
         @media(max-width: 400px) {
           body {
               font-size: 1.05em;
           }
             
+          .page-title-bar{
+             margin: 5% 2% 0 2%;
+          }
+            
           .timeline-item {
               padding: 3em 0.6em 1em;
           }
+            
+          .timeline-item p{
+              /*background-color:#efefef;*/
+              padding: 2% 2% 3% 3%;
+              margin: 0% -4% 4% 0%;
+              box-shadow: 0.1em 0.2em 1.1em #666;
+              border-radius: 1em;
+          }
+            
+          #content {
+              right: 10%;
+              top: 8%;
+          }
         }
         
-        /*.timeline-item hr {
-            border-bottom: 2px solid rgba(0, 0, 0, 0.3);
-        }*/
     </style>
   </head>
   <body>
      
      <header class="page-title-bar">
          <h1 class="page-title"> RSS Feed </h1>
+         <form id="content">
+             <input type="text" name="input" class="input" id="search-input">
+             <button type="reset" class="search" id="search-btn"></button>
+         </form>
      </header>
      
      <!-- RSS FEED -->
      <div class="container">
       <div class="content">
         <div class="tabset">
-            
+        
         </div>
       </div>
     </div>
@@ -222,13 +384,10 @@
                         //Delete duplicated title in description
                         $('#'+keyword.toLowerCase()+' .timeline-item p').each(function( index, value ) {
                             var title = $(this).find("a").text();
-                            title = title.replace("&", "&amp;").replace(" - ", "&nbsp;&nbsp;")
-                            console.log("TITLE:   "+title);
+                            title = title.replace("&", "&amp;").replace(" - ", "&nbsp;&nbsp;");
                             if (title) {
                                 var desc = $(this).find("span").html().replace(title, "");
                                 $(this).find("span").html(desc);
-                                
-                                console.log("DESC:   "+desc);
                             }
                         });
                     }
@@ -236,6 +395,16 @@
                 
             });
         });
+        
+        const input = document.getElementById("search-input");
+const searchBtn = document.getElementById("search-btn");
+
+const expand = () => {
+  searchBtn.classList.toggle("close");
+  input.classList.toggle("square");
+};
+
+searchBtn.addEventListener("click", expand);
         
     </script>
   </body>
