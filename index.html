@@ -436,20 +436,6 @@
           }
 
         };
-
-        // AFTER DOM LOADS
-        $(function(){
-            
-            list.getLocalStorage();
-            list.display();
-            
-            $("#search-input").on('keypress',function(e) {
-                if(e.which == 13) {
-                    e.preventDefault();
-                    list.newKeyword(e);
-                }
-            });
-        });
         
         // SEARCH BUTTON
         const input = document.getElementById("search-input");
@@ -461,6 +447,21 @@
         };
 
         searchBtn.addEventListener("click", expand);
+        
+        // AFTER DOM LOADS
+        $(function(){
+            
+            list.getLocalStorage();
+            list.display();
+            
+            $("#search-input").on('keypress',function(e) {
+                if(e.which == 13) {
+                    e.preventDefault();
+                    list.newKeyword(e);
+                    searchBtn.click();
+                }
+            });
+        });
         
     </script>
   </body>
