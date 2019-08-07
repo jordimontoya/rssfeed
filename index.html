@@ -332,79 +332,135 @@
     
     <script>
         
-        /*var ids = $(".tab-panel").map(function(){
-            return this.id
-        }).get();*/
-        
-        var keywords = ["FACEBOOK", "ALPHABET", "APPLE", "AMAZON", "NETFLIX"];
-        
-        $(function(){
+        //tabset object
+        var list = {
+          keywords : [],
             
-            // Create tabs
-            $.each(keywords, function( index, keyword ) {
+          addLocalStorage: function(element){
+            localStorage.setItem("keywords", JSON.stringify(element));     
+          },
 
-              if(index != 0){
-                  $('.tabset').append(
-                    '<input type="radio" name="tabset" id="tab'+index+'" aria-controls="'+keyword.toLowerCase()+'"><label for="tab'+index+'">'+keyword+'</label>'
+          getLocalStorage: function(){
+            if (localStorage.getItem("keywords") !== null && localStorage.getItem("keywords") !== ""){
+              this.keywords = JSON.parse(localStorage.getItem("keywords"));
+              console.log(JSON.parse(localStorage.getItem("keywords")));
+            }
+          },
+          
+          newKeyword : function(e){ 
+            let keyword = $("#search-input").val();
+            
+            if (keyword !== '' && keyword.length > 0) {
+                this.keywords.push(keyword);
+                $("#search-input").val("");
+                this.addLocalStorage(this.keywords);
+                list.display();
+            }              
+          },
+
+          display : function(){
+            //check if there are any keywords
+            $( ".tabset" ).empty();  
+            if (this.keywords !== 'undefined' && this.keywords.length>0) {
+                // Create tabs
+                $.each(this.keywords, function( index, keyword ) {
+                  if(index != 0){
+                      $('.tabset').append(
+                        '<input type="radio" name="tabset" id="tab'+index+'" aria-controls="'+keyword.toLowerCase()+'"><label for="tab'+index+'">'+keyword+'</label>'
+                      );
+                  } else {
+                      $('.tabset').append(
+                        '<input type="radio" name="tabset" id="tab'+index+'" aria-controls="'+keyword.toLowerCase()+'" checked><label for="tab'+index+'">'+keyword+'</label>'
+                      );
+                  }
+                });
+
+                // Create tab content structure
+                $('.tabset').append(
+                    '<div class="tab-panels"></div>'
+                );
+
+                // Create tab content
+                $.each(this.keywords, function( index, keyword ) {
+                  $('.tab-panels').append(
+                        '<section id="'+keyword.toLowerCase()+'" class="tab-panel">'+
+                            '<div class="timeline-item today" date-is="Today"></div>'+
+                            '<div class="timeline-item yesterday" date-is="Yesterday"></div>'+
+                            '<div class="timeline-item previous" date-is="Previous"></div>'+
+                        '</section>'
                   );
-              } else {
-                  $('.tabset').append(
-                    '<input type="radio" name="tabset" id="tab'+index+'" aria-controls="'+keyword.toLowerCase()+'" checked><label for="tab'+index+'">'+keyword+'</label>'
-                  );
-              }
-            });
-            
-            // Create tab content structure
-            $('.tabset').append(
-                '<div class="tab-panels"></div>'
-            );
-            
-            // Create tab content
-            $.each(keywords, function( index, keyword ) {
-              $('.tab-panels').append(
-                    '<section id="'+keyword.toLowerCase()+'" class="tab-panel">'+
-                        '<div class="timeline-item today" date-is="Today"></div>'+
-                        '<div class="timeline-item yesterday" date-is="Yesterday"></div>'+
-                        '<div class="timeline-item previous" date-is="Previous"></div>'+
-                    '</section>'
-              );
-            
-              // Create rss content
-              $('#'+keyword.toLowerCase()+' .timeline-item').rss(
-                    'https://news.google.com/rss/news?&scoring=d&q='+keyword.toLowerCase(),{
-                    limit: 5,
-                    effect: 'slideFast',
-                    dateFormat: 'DDMMYYYY',
-                    layoutTemplate: '{entries}',
-                    entryTemplate: '<p class="{date}"><a href="{url}" target="_blank" rel="nofollow">{title}</a><br><br><span>{bodyPlain}</span></p>',
-                    success: function() {
-                        $('#'+keyword.toLowerCase()+' .timeline-item .'+moment().format('DDMMYYYY')).prependTo('#'+keyword.toLowerCase()+' .today');
-                        $('#'+keyword.toLowerCase()+' .timeline-item .'+moment().subtract(1, 'days').format('DDMMYYYY')).prependTo('#'+keyword.toLowerCase()+' .yesterday');
-                        
-                        //Delete duplicated title in description
-                        $('#'+keyword.toLowerCase()+' .timeline-item p').each(function( index, value ) {
-                            var title = $(this).find("a").text();
-                            title = title.replace("&", "&amp;").replace(" - ", "&nbsp;&nbsp;");
-                            if (title) {
-                                var desc = $(this).find("span").html().replace(title, "");
-                                $(this).find("span").html(desc);
-                            }
-                        });
-                    }
+
+                  // Create rss content
+                  $('#'+keyword.toLowerCase()+' .timeline-item').rss(
+                        'https://news.google.com/rss/news?&scoring=d&q='+keyword.toLowerCase(),{
+                        limit: 5,
+                        effect: 'slideFast',
+                        dateFormat: 'DDMMYYYY',
+                        layoutTemplate: '{entries}',
+                        entryTemplate: '<p class="{date} data"><a href="{url}" target="_blank" rel="nofollow">{title}</a><br><br><span>{bodyPlain}</span></p>',
+                        success: function() {
+                            $('.timeline-item').find("entries").remove();
+                            
+                            $('#'+keyword.toLowerCase()+' .timeline-item .'+moment().format('DDMMYYYY')).prependTo('#'+keyword.toLowerCase()+' .today');
+                            $('#'+keyword.toLowerCase()+' .timeline-item .'+moment().subtract(1, 'days').format('DDMMYYYY')).prependTo('#'+keyword.toLowerCase()+' .yesterday');
+
+                            //Delete duplicated title in description
+                            $('#'+keyword.toLowerCase()+' .timeline-item p').each(function( index, value ) {
+                                var title = $(this).find("a").text();
+                                if (title) {
+                                    title = title.replace("&", "&amp;").replace(" - ", "&nbsp;&nbsp;");
+                                    var desc = $(this).find("span").html().replace(title, "");
+                                    $(this).find("span").html(desc);
+                                }
+                            });
+                            
+                            $('#'+keyword.toLowerCase()+' .timeline-item:empty').append("No data found.");
+                        },
+                        error: function() {
+                            $('#'+keyword.toLowerCase()+' .timeline-item').html("Error connecting to Google.");
+                        }
+                            
+                    });
+                    
                 });
                 
+          } else {
+              $('.tabset').append("No keywords found in your local storage.");
+          } 
+        },
+
+          clear : function(){
+            this.keywords = [];
+            localStorage.removeItem("keywords");
+            list.display();
+          }
+
+        };
+
+        // AFTER DOM LOADS
+        $(function(){
+            
+            list.getLocalStorage();
+            list.display();
+            
+            $("#search-input").on('keypress',function(e) {
+                if(e.which == 13) {
+                    e.preventDefault();
+                    list.newKeyword(e);
+                }
             });
         });
         
+        // SEARCH BUTTON
         const input = document.getElementById("search-input");
-const searchBtn = document.getElementById("search-btn");
+        const searchBtn = document.getElementById("search-btn");
 
-const expand = () => {
-  searchBtn.classList.toggle("close");
-  input.classList.toggle("square");
-};
+        const expand = () => {
+          searchBtn.classList.toggle("close");
+          input.classList.toggle("square");
+        };
 
-searchBtn.addEventListener("click", expand);
+        searchBtn.addEventListener("click", expand);
         
     </script>
   </body>
