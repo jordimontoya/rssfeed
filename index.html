@@ -41,15 +41,6 @@
           display: none;
         }
 
-        .tabset > input:first-child:checked ~ .tab-panels > .tab-panel:first-child,
-        .tabset > input:nth-child(3):checked ~ .tab-panels > .tab-panel:nth-child(2),
-        .tabset > input:nth-child(5):checked ~ .tab-panels > .tab-panel:nth-child(3),
-        .tabset > input:nth-child(7):checked ~ .tab-panels > .tab-panel:nth-child(4),
-        .tabset > input:nth-child(9):checked ~ .tab-panels > .tab-panel:nth-child(5),
-        .tabset > input:nth-child(11):checked ~ .tab-panels > .tab-panel:nth-child(6) {
-          display: block;
-        }
-
         .tabset > label {
           position: relative;
           display: inline-block;
@@ -91,10 +82,6 @@
           padding: 20px 0;
           border-top: 1px solid #ccc;
         }
-
-        /*.tabset {
-          max-width: 65em;
-        }*/
         
         /* ----------------  TIMELINE*/
 
@@ -137,12 +124,7 @@
         .timeline-item:last-child {
           -o-border-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 60%, rgba(0, 0, 0, 0)) 1 100%;
              border-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 60%, rgba(0, 0, 0, 0)) 1 100%;
-        }
-        
-        /*.timeline-item hr {
-            border-bottom: 2px solid rgba(0, 0, 0, 0.3);
-        }*/
-        
+        }        
         
         /* BUTTON */
         #content {
@@ -332,8 +314,7 @@
     
     <script>
         
-        const inputSearch = $("#search-input");
-        const searchBtn = $("#search-btn");
+        const searchBtn = document.getElementById("search-btn");
         const tabset = $(".tabset");
         
         //tabset object
@@ -352,14 +333,14 @@
           },
           
           newKeyword : function(e){ 
-              let keyword = inputSearch.val();
+              let keyword = $("#search-input").val();
             
             if (keyword !== '' && keyword.length > 0) {
                 this.keywords.push(keyword);
-                inputSearch.val("");
+                $("#search-input").val("");
                 this.addLocalStorage(this.keywords);
                 list.display();
-            }              
+            }
           },
 
           display : function(){
@@ -368,15 +349,18 @@
             if (this.keywords !== 'undefined' && this.keywords.length>0) {
                 // Create tabs
                 $.each(this.keywords, function( index, keyword ) {
+                  var keywordFormatted = keyword.toLowerCase().replace(" ", "+").replace("&nbsp;", "+");
+                    
                   if(index != 0){
                       tabset.append(
-                        '<input type="radio" name="tabset" id="tab'+index+'" aria-controls="'+keyword.toLowerCase()+'"><label for="tab'+index+'">'+keyword+'</label>'
+                        '<input type="radio" name="tabset" id="tab'+index+'" aria-controls="'+keywordFormatted+'"><label for="tab'+index+'">'+keyword+'</label>'
                       );
                   } else {
                       tabset.append(
-                        '<input type="radio" name="tabset" id="tab'+index+'" aria-controls="'+keyword.toLowerCase()+'" checked><label for="tab'+index+'">'+keyword+'</label>'
+                        '<input type="radio" name="tabset" id="tab'+index+'" aria-controls="'+keywordFormatted+'" checked><label for="tab'+index+'">'+keyword+'</label>'
                       );
                   }
+                    
                 });
 
                 // Create tab content structure
@@ -386,8 +370,11 @@
 
                 // Create tab content
                 $.each(this.keywords, function( index, keyword ) {
-                  $('.tab-panels').append(
-                        '<section id="'+keyword.toLowerCase()+'" class="tab-panel">'+
+                    
+                    var keywordFormatted = formatKeyword(keyword);
+                  
+                    $('.tab-panels').append(
+                        '<section id="'+keywordFormatted+'" class="tab-panel">'+
                             '<div class="timeline-item today" date-is="Today"></div>'+
                             '<div class="timeline-item yesterday" date-is="Yesterday"></div>'+
                             '<div class="timeline-item previous" date-is="Previous"></div>'+
@@ -395,21 +382,22 @@
                   );
 
                   // Create rss content
-                  $('#'+keyword.toLowerCase()+' .timeline-item').rss(
-                        'https://news.google.com/rss/news?&scoring=d&q='+keyword.toLowerCase(),{
-                        limit: 5,
+                  $('#'+keywordFormatted+' .timeline-item').rss(
+                        'https://news.google.com/rss/news?q='+keyword.toLowerCase().replace(/ /g, "%20"),{
+                        limit: 30,
                         effect: 'slideFast',
                         dateFormat: 'DDMMYYYY',
                         layoutTemplate: '{entries}',
                         entryTemplate: '<p class="{date} data"><a href="{url}" target="_blank" rel="nofollow">{title}</a><br><br><span>{bodyPlain}</span></p>',
                         success: function() {
+                            console.log('https://news.google.com/rss/news?q='+keywordFormatted);
                             $('.timeline-item').find("entries").remove();
                             
-                            $('#'+keyword.toLowerCase()+' .timeline-item .'+moment().format('DDMMYYYY')).prependTo('#'+keyword.toLowerCase()+' .today');
-                            $('#'+keyword.toLowerCase()+' .timeline-item .'+moment().subtract(1, 'days').format('DDMMYYYY')).prependTo('#'+keyword.toLowerCase()+' .yesterday');
+                            $('#'+keywordFormatted+' .timeline-item .'+moment().format('DDMMYYYY')).prependTo('#'+keywordFormatted+' .today');
+                            $('#'+keywordFormatted+' .timeline-item .'+moment().subtract(1, 'days').format('DDMMYYYY')).prependTo('#'+keywordFormatted+' .yesterday');
 
                             //Delete duplicated title in description
-                            $('#'+keyword.toLowerCase()+' .timeline-item p').each(function( index, value ) {
+                            $('#'+keywordFormatted+' .timeline-item p').each(function( index, value ) {
                                 var title = $(this).find("a").text();
                                 if (title) {
                                     title = title.replace("&", "&amp;").replace(" - ", "&nbsp;&nbsp;");
@@ -418,10 +406,10 @@
                                 }
                             });
                             
-                            $('#'+keyword.toLowerCase()+' .timeline-item:empty').append("No data found.");
+                            $('#'+keywordFormatted+' .timeline-item:empty').append("No data found.");
                         },
                         error: function() {
-                            $('#'+keyword.toLowerCase()+' .timeline-item').html("Error connecting to Google RSS.");
+                            $('#'+keywordFormatted+' .timeline-item').html("Error connecting to Google RSS.");
                         }
                             
                     });
@@ -430,7 +418,13 @@
                 
           } else {
               tabset.append("No keywords found in your local storage.");
-          } 
+          }
+              
+          $("input[name=tabset]").attr('checked',false);
+          $('.tab-panel').css("display", "none");
+              
+          $("input[name=tabset]").first().attr('checked',true);
+          $('.tab-panel').first().css("display", "block");
         },
 
           clear : function(){
@@ -444,7 +438,7 @@
         // SEARCH BUTTON
         const expand = () => {
           searchBtn.classList.toggle("close");
-          inputSearch.classList.toggle("square");
+          document.getElementById("search-input").classList.toggle("square");
         };
 
         searchBtn.addEventListener("click", expand);
@@ -455,14 +449,29 @@
             list.getLocalStorage();
             list.display();
             
-            inputSearch.on('keypress',function(e) {
+            $("#search-input").on('keypress',function(e) {
                 if(e.which == 13) {
                     e.preventDefault();
                     list.newKeyword(e);
                     searchBtn.click();
                 }
             });
+            
+            $("input[name=tabset]").on('click',function(e) {
+                console.log("asd");
+                $("input[name=tabset]").attr('checked',false);
+                $(this).attr('checked',true);
+                
+                var label = $("label[for='" + $(this).attr('id') + "']").text();
+                $('.tab-panel').css("display", "none");
+                $('#'+formatKeyword(label)).css("display", "block");
+                console.log(label);
+            });
         });
+        
+         function formatKeyword(keyword) {
+            return keyword.toLowerCase().replace(/ /g, "-")
+        };
         
     </script>
   </body>
