@@ -332,6 +332,10 @@
     
     <script>
         
+        const inputSearch = $("#search-input");
+        const searchBtn = $("#search-btn");
+        const tabset = $(".tabset");
+        
         //tabset object
         var list = {
           keywords : [],
@@ -348,11 +352,11 @@
           },
           
           newKeyword : function(e){ 
-            let keyword = $("#search-input").val();
+              let keyword = inputSearch.val();
             
             if (keyword !== '' && keyword.length > 0) {
                 this.keywords.push(keyword);
-                $("#search-input").val("");
+                inputSearch.val("");
                 this.addLocalStorage(this.keywords);
                 list.display();
             }              
@@ -360,23 +364,23 @@
 
           display : function(){
             //check if there are any keywords
-            $( ".tabset" ).empty();  
+            tabset.empty();  
             if (this.keywords !== 'undefined' && this.keywords.length>0) {
                 // Create tabs
                 $.each(this.keywords, function( index, keyword ) {
                   if(index != 0){
-                      $('.tabset').append(
+                      tabset.append(
                         '<input type="radio" name="tabset" id="tab'+index+'" aria-controls="'+keyword.toLowerCase()+'"><label for="tab'+index+'">'+keyword+'</label>'
                       );
                   } else {
-                      $('.tabset').append(
+                      tabset.append(
                         '<input type="radio" name="tabset" id="tab'+index+'" aria-controls="'+keyword.toLowerCase()+'" checked><label for="tab'+index+'">'+keyword+'</label>'
                       );
                   }
                 });
 
                 // Create tab content structure
-                $('.tabset').append(
+                tabset.append(
                     '<div class="tab-panels"></div>'
                 );
 
@@ -417,7 +421,7 @@
                             $('#'+keyword.toLowerCase()+' .timeline-item:empty').append("No data found.");
                         },
                         error: function() {
-                            $('#'+keyword.toLowerCase()+' .timeline-item').html("Error connecting to Google.");
+                            $('#'+keyword.toLowerCase()+' .timeline-item').html("Error connecting to Google RSS.");
                         }
                             
                     });
@@ -425,7 +429,7 @@
                 });
                 
           } else {
-              $('.tabset').append("No keywords found in your local storage.");
+              tabset.append("No keywords found in your local storage.");
           } 
         },
 
@@ -438,12 +442,9 @@
         };
         
         // SEARCH BUTTON
-        const input = document.getElementById("search-input");
-        const searchBtn = document.getElementById("search-btn");
-
         const expand = () => {
           searchBtn.classList.toggle("close");
-          input.classList.toggle("square");
+          inputSearch.classList.toggle("square");
         };
 
         searchBtn.addEventListener("click", expand);
@@ -454,7 +455,7 @@
             list.getLocalStorage();
             list.display();
             
-            $("#search-input").on('keypress',function(e) {
+            inputSearch.on('keypress',function(e) {
                 if(e.which == 13) {
                     e.preventDefault();
                     list.newKeyword(e);
